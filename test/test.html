@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Break Fire Test page</title>
+		<meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; minimum-scale=1"/>
+
+	</head>
+	<body>
+		<div class="test">Enter Status</div>
+		<div class="exit">Exit Status</div>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>	
+		<script src="../breakfire.js"></script>
+		<script>
+			var obj = {
+					'min':0,
+					'max':319,
+					enter:
+						function() {
+							$('.test').text('Entered Mobile');
+						}
+					,exit:
+						function() {
+							$('.exit').text('Exited Mobile');
+						}
+			};
+			var obj2 = {
+					'min':320,
+					'max':479,
+					enter:
+						function() {
+							$('.test').text('Entered iPhone Portrait');
+							$('body').css('background','blue');
+						}
+					,exit:
+						function() {
+							$('.exit').text('Exited iPhone Portrait');
+						}
+			};
+			var obj3 = {
+					'min':480,
+					'max':767,
+					enter:
+						function() {
+							$('.test').text('Entered iPhone Landscape');
+							$('body').css('background','red');
+						}
+					,exit:
+						function() {
+							$('.exit').text('Exited iPhone Landscape');
+						}
+			};
+			var obj4 = {
+					'min':768,
+					'max':1023,
+					enter:
+						function() {
+							$('.test').text('Entered iPad Portrait');
+							$('body').css('background','green');
+						}
+					,exit:
+						function() {
+							$('.exit').text('Exited iPad Portrait');
+						}
+			};
+			var obj5 = {
+					'min':1024,
+					'max':9999999,
+					enter:
+						function() {
+							$('.test').text('Entered iPad Landscape/Desktop');
+							$('body').css('background','fuchsia');
+						}
+					,exit:
+					function() {
+							$('.exit').text('Exited iPad Landscape/Desktop');
+						}
+			};
+
+			breakfire(obj);
+			breakfire(obj2);
+			breakfire(obj3);
+			breakfire(obj4);
+			breakfire(obj5);
+		</script>
+	</body>
+</html>
