@@ -5,16 +5,19 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
+
+
 (function(win) {
-	
-	var breakpoints = [],
-		lastCall,
+	// Use a sweet closure to keep our variables safe
+	var breakpoints = [], //An array of all the breakpoints passed in 
+		lastCall, // A resize event throttler
 		resizeDefer,
 		resizeThrottle = 30,
 		resizeEvent = function() {
 			var now = (new Date().getTime());
-
+			//have we called it before? was it more than 30ms ago?
 			if(lastCall && now - lastCall < resizeThrottle) {
+				// defer defer!
 				clearTimeout(resizeDefer);
 				resizeDefer = setTimeout(resizeEvent,resizeThrottle);
 				return;
@@ -24,20 +27,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 			fireBreakpoints();
 		},
-		calculateWidth = function() {
-			return win.innerWidth || (function() {
-				return document.documentElement.clientWidth || document.body.clientWidth;
-			})();
+		calculateWidth = function() { // Function to get the true width of the browser including the scrollbar
+			return win.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 		},
 		fireBreakpoints = function() {
-			var bpCount = breakpoints.length,
+			var bpCount = breakpoints.length, // Cache the length of the set breakpoints
 				vp = calculateWidth();
 
 			for(var i=0;i<bpCount;i++) {
 				var bp = breakpoints[i];
 				if('min' in bp && 'max' in bp && 'enter' in bp && 'exit' in bp) {
 					if(vp >= bp.min && vp <= bp.max) {
-						if(!bp.active) {
+						if(!bp.active) { // If it isn't already active - call - only want to "enter" once
 							bp.enter();
 							bp.active = true;
 						}
@@ -52,24 +53,27 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		};
 
 
-	win.breakfire = function(config) {
+	win.breakdance = function(config) {
 		
-		if(config instanceof Array) {
+		if(config instanceof Array) { // If we have an array we'll apply all of the breakpoints
 			for(var i=0;i<config.length;i++) {
-				win.breakfire(config[i]);
+				win.breakdance(config[i]);
 			}
 		}else{
 			config.active = false;
 			breakpoints.push(config);
 		}
 
-		window.breakfire.update();
+		window.breakdance.update();
 	};
 
-	window.breakfire.update = function() {
+
+	//expose an update method to fire the states again
+	window.breakdance.update = function() {
 		resizeEvent();
 	};
 
+	// Attach our resize events
 	if(win.addEventListener) {
 		win.addEventListener('resize',resizeEvent,false);
 	}else if(win.attachEvent) {
