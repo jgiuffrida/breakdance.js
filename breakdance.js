@@ -12,6 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	var breakpoints = [], //An array of all the breakpoints passed in 
 		lastCall, // A resize event throttler
 		resizeDefer,
+		toCall = [],
 		resizeThrottle = 30,
 		resizeEvent = function() {
 			var now = (new Date().getTime());
@@ -32,39 +33,58 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		},
 		fireBreakpoints = function() {
 			var bpCount = breakpoints.length, // Cache the length of the set breakpoints
-				vp = calculateWidth();
-
+				vp = calculateWidth(),
+				enters = [], exits = [];
 			for(var i=0;i<bpCount;i++) {
 				var bp = breakpoints[i];
 				if('min' in bp && 'max' in bp && 'enter' in bp && 'exit' in bp) {
 					if(vp >= bp.min && vp <= bp.max) {
 						if(!bp.active) { // If it isn't already active - call - only want to "enter" once
-							bp.enter();
+							enters.push(bp.enter); // put the enter functions to call into an array
 							bp.active = true;
 						}
 					}else{
 						if(bp.active) {
-							bp.exit();
+							exits.push(bp.exit); // put the exit functions into an array as well
 							bp.active = false;
 						}
 					}
 				}
 			}
+
+			// finally call finalize passing all the exits and enters
+			toCall = exits.concat(enters);
+			enters = [];
+			exits = [];
+			if(toCall.length){
+				finalize(toCall,0);
+			}
+		},
+		finalize = function(toCall,idx) {
+			toCall[idx]();
+			if(idx+1 < toCall.length) {
+				finalize(toCall,idx+1);
+			}else{
+				toCall = [];
+			}
 		};
 
 
-	win.breakdance = function(config) {
-		
+	win.breakdance = function(config,update) {
+		var update = update || true;
 		if(config instanceof Array) { // If we have an array we'll apply all of the breakpoints
 			for(var i=0;i<config.length;i++) {
-				win.breakdance(config[i]);
+				win.breakdance(config[i],false);
 			}
+			window.breakdance.update();
 		}else{
 			config.active = false;
 			breakpoints.push(config);
+			if(update) {
+				window.breakdance.update();
+			}
 		}
 
-		window.breakdance.update();
 	};
 
 
