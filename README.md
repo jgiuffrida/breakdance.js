@@ -18,6 +18,7 @@ Usage
 ======
 1. Include breadance.js on page
 2. Create move or moves - breakdance excepts either option.
+<pre>
     var moves = [
     	{
     		min:0,
@@ -40,8 +41,11 @@ Usage
     		}
     	},
     ];
+</pre>
 3. Pass moves to breakdance
+<pre>
     breakdance(moves);
+</pre>
 4. $$$$
 
 
