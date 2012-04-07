@@ -2,6 +2,7 @@
 ### Make that browser dance...
 
  - Copyright 2012: Joe Giuffrida, http://www.josephgiuffrida.com
+ - Named by Jason Rhodes: https://github.com/jasonrhodes
  - Dual licensed under the MIT or GPL Version 2 licenses. 
 
 The goal of this script is provide a way to execute different pieces of javascript at resolution breakpoints, effectively turning the browser into a resolution based state machine. Each breakpoint specified has an user defined enter and exit function which will run once when the min/max width range is met.
