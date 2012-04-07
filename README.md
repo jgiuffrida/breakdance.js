@@ -18,32 +18,32 @@ Usage
 ======
 1. Include breadance.js on page
 2. Create move or moves - breakdance excepts either option.
-```javascript
-	var moves = [
-		{
-			min:0,
-			max:479,
-			enter: function() {
-				console.log('Enter 0-479');
-			},
-			exit: function() {
-				console.log('Exit 0-479');
-			}
+```
+var moves = [
+	{
+		min:0,
+		max:479,
+		enter: function() {
+			console.log('Enter 0-479');
 		},
-		{
-			min:480,
-			max:9999,
-			enter: function() {
-				console.log('Enter 480 and beyond');
-			},
-			exit: function() {
-				console.log('Exit 480 and beyond');
-			}
+		exit: function() {
+			console.log('Exit 0-479');
+		}
+	},
+	{
+		min:480,
+		max:9999,
+		enter: function() {
+			console.log('Enter 480 and beyond');
 		},
-	];
+		exit: function() {
+			console.log('Exit 480 and beyond');
+		}
+	},
+];
 ```
 3. Pass moves to breakdance
-```javascript
+```
 	breakdance(moves);
 ```
 4. $$$$
