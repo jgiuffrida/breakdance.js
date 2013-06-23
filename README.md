@@ -16,7 +16,7 @@ Features
 
 Usage
 ======
-1. Include breadance.js on page
+1. Include breakdance.js on page
 2. Create move or moves - breakdance excepts either option.
 <pre>
     var moves = [
